@@ -105,6 +105,13 @@ func applyMask(result *env.DiffResult) {
 }
 
 func shouldUseColor(colorMode string) bool {
+	// Never use color in CI environments (unless explicitly forced)
+	if colorMode != "always" {
+		if os.Getenv("CI") != "" || os.Getenv("GITHUB_ACTIONS") != "" ||
+			os.Getenv("GITLAB_CI") != "" || os.Getenv("JENKINS_URL") != "" {
+			return false
+		}
+	}
 	switch colorMode {
 	case "always":
 		return true
@@ -121,6 +128,10 @@ func shouldUseColor(colorMode string) bool {
 }
 
 func parseFormatType(s string) env.FormatType {
+	// Auto-detect GitHub Actions format when not explicitly set
+	if s == "table" && os.Getenv("GITHUB_ACTIONS") != "" {
+		return env.FormatGitHub
+	}
 	switch s {
 	case "json":
 		return env.FormatJSON
