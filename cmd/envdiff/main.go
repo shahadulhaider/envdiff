@@ -10,9 +10,15 @@ import (
 var version = "dev"
 
 func main() {
-	cmd := root.NewRootCmd(version)
-	if err := cmd.Execute(); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
+	rootCmd := root.NewRootCmd(version)
+	rootCmd.AddCommand(
+		newDiffCmd(),
+	)
+
+	if err := rootCmd.Execute(); err != nil {
+		if !handleExitError(err) {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
 	}
 }
