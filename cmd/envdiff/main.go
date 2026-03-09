@@ -15,6 +15,7 @@ func main() {
 		newDiffCmd(),
 		newCheckCmd(),
 		newCompareCmd(),
+		newValidateCmd(),
 	)
 
 	if err := rootCmd.Execute(); err != nil {
