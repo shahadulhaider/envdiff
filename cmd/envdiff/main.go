@@ -20,6 +20,7 @@ func main() {
 		newGitCmd(),
 		newCICmd(),
 		newHookCmd(),
+		newSyncCmd(),
 	)
 
 	if err := rootCmd.Execute(); err != nil {
