@@ -1,0 +1,44 @@
+version: 2
+
+builds:
+  - main: ./cmd/envdiff
+    binary: envdiff
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore\(deps\)'
+      - '^ci:'
+
+brews:
+  - name: envdiff
+    repository:
+      owner: shahadulhaider
+      name: homebrew-tap
+      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+    directory: Formula
+    homepage: https://github.com/shahadulhaider/envdiff
+    description: Compare, validate, and sync .env files across environments
+    license: GPL-3.0
+    install: |
+      bin.install "envdiff"
+    test: |
+      system "#{bin}/envdiff", "--version"
