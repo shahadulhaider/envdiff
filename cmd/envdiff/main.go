@@ -13,6 +13,7 @@ func main() {
 	rootCmd := root.NewRootCmd(version)
 	rootCmd.AddCommand(
 		newDiffCmd(),
+		newCheckCmd(),
 	)
 
 	if err := rootCmd.Execute(); err != nil {
